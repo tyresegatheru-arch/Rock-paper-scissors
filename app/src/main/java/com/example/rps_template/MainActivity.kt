@@ -49,8 +49,10 @@ class MainActivity : ComponentActivity() {
 
 // ---- Stage 1: enum classes -------------------------------------------
 // Make an enum class called Move with ROCK, PAPER and SCISSORS.
+enum class Move (val label: String) {
+    ROCK("rock"), PAPER("Paper"), SCISSORS("Scissors")}
 // Make an enum class called Outcome with WIN, LOSE and DRAW.
-
+enum class Outcome{WIN, LOSE, DRAW}
 
 // ---- Stage 2: decide who wins ----------------------------------------
 // Write a function decide(player: Move, computer: Move): Outcome
@@ -66,10 +68,15 @@ class MainActivity : ComponentActivity() {
 // Stage 4: this becomes the parent that chooses which screen to show.
 @Composable
 fun RockPaperScissorsApp() {
+    var computerMove by rememberSaveable { mutableStateOf (Move.ROCK)  }
+
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
         Text("Rock, Paper, Scissors", fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Your game goes here")
+        Text("computer picked: $computerMove")
+        Button(onClick = { computerMove = Move.entries.random()}) {
+            Text("pick for me")
+        }
     }
 }
 
