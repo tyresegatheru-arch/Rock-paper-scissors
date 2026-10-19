@@ -1,4 +1,4 @@
-package com.example.rockpaperscissors
+package com.example.rps_template
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -73,7 +73,7 @@ fun RockPaperScissorsApp() {
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
         Text("Rock, Paper, Scissors", fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Text("computer picked: $computerMove")
+        Text("computer picked: ${computerMove.label}")
         Button(onClick = { computerMove = Move.entries.random()}) {
             Text("pick for me")
         }
