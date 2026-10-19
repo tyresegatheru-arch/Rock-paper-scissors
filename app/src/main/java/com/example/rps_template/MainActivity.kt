@@ -78,18 +78,25 @@ fun decide(player: Move, computer: Move) : Outcome{
 @Composable
 fun RockPaperScissorsApp() {
     var message by rememberSaveable { mutableStateOf("Pick a move") }
-    Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
+    var playerScore by rememberSaveable() {mutableStateOf(0) }
+    var computerScore by rememberSaveable() {mutableStateOf(0) }
+    val gameOver = playerScore == 3  || computerScore == 3
+            Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
         Text("Rock, Paper, Scissors", fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
         Text(message)
         Spacer(modifier = Modifier.height(16.dp))
         for (move in Move.entries) {
-            Button(onClick = {
+            Button(enabled = !gameOver, onClick =  {
                 val computerMove = Move.entries.random()
                 val outcome = decide(move, computerMove)
                 message = "You: ${move.label} Computer: ${computerMove.label} $outcome"
+
+                if (outcome == Outcome.WIN) playerScore = playerScore + 1
+                if (outcome == Outcome.LOSE) computerScore = computerScore + 1
             }) {
                 Text(move.label)
+                Text("You $playerScore - $computerScore Computer", fontSize = 27.sp)
             }
         }
     }
