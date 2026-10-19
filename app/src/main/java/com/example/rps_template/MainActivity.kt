@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 // ---- Stage 1: enum classes -------------------------------------------
 // Make an enum class called Move with ROCK, PAPER and SCISSORS.
 enum class Move (val label: String) {
-    ROCK("rock"), PAPER("Paper"), SCISSORS("Scissors")}
+    ROCK("rock🪨"), PAPER("Paper🗞️"), SCISSORS("Scissors✂️")}
 // Make an enum class called Outcome with WIN, LOSE and DRAW.
 enum class Outcome{WIN, LOSE, DRAW}
 
@@ -58,6 +58,15 @@ enum class Outcome{WIN, LOSE, DRAW}
 // Write a function decide(player: Move, computer: Move): Outcome
 // Use the rules table from the start of the lesson.
 
+fun decide(player: Move, computer: Move) : Outcome{
+    return when{
+        player == computer -> Outcome.DRAW
+        player== Move.ROCK && computer == Move.SCISSORS -> Outcome.WIN
+        player== Move.PAPER && computer == Move.ROCK -> Outcome.WIN
+        player== Move.SCISSORS && computer == Move.PAPER -> Outcome.WIN
+        else -> Outcome.LOSE
+    }
+}
 
 // ---- Stage 4: screens ------------------------------------------------
 // Make an enum class called Screen with START, GAME and RESULTS.
@@ -68,14 +77,20 @@ enum class Outcome{WIN, LOSE, DRAW}
 // Stage 4: this becomes the parent that chooses which screen to show.
 @Composable
 fun RockPaperScissorsApp() {
-    var computerMove by rememberSaveable { mutableStateOf (Move.ROCK)  }
-
+    var message by rememberSaveable { mutableStateOf("Pick a move") }
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
         Text("Rock, Paper, Scissors", fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Text("computer picked: ${computerMove.label}")
-        Button(onClick = { computerMove = Move.entries.random()}) {
-            Text("pick for me")
+        Text(message)
+        Spacer(modifier = Modifier.height(16.dp))
+        for (move in Move.entries) {
+            Button(onClick = {
+                val computerMove = Move.entries.random()
+                val outcome = decide(move, computerMove)
+                message = "You: ${move.label} Computer: ${computerMove.label} $outcome"
+            }) {
+                Text(move.label)
+            }
         }
     }
 }
